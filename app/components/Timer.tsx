@@ -11,21 +11,27 @@ export default function Timer() {
       <div id="timer-options" className="flex gap-6">
         <button
           className={
-            active === 'pomodoro' ? 'bg-background px-4 py-1 rounded-md' : ''
+            active === 'pomodoro'
+              ? 'bg-background px-4 py-1 rounded-md font-bold'
+              : ''
           }
         >
           Pomodoro
         </button>
         <button
           className={
-            active === 'short-break' ? 'bg-background px-4 py-1 rounded-md' : ''
+            active === 'short-break'
+              ? 'bg-background px-4 py-1 rounded-md font-bold'
+              : ''
           }
         >
           Short Break
         </button>
         <button
           className={
-            active === 'long-break' ? 'bg-background px-4 py-1 rounded-md' : ''
+            active === 'long-break'
+              ? 'bg-background px-4 py-1 rounded-md font-bold'
+              : ''
           }
         >
           Long Break
@@ -36,7 +42,7 @@ export default function Timer() {
       </div>
       <button
         id="start-stop-button"
-        className="button uppercase text-2xl text-background bg-white px-14 rounded-md py-3 border-b-8"
+        className="button uppercase text-2xl text-background bg-white px-14 rounded-md py-3 border-b-8 font-bold"
       >
         Start
       </button>
