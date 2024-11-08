@@ -1,7 +1,9 @@
+import { Timer } from './components';
+
 export default function Home() {
   return (
     <div>
-      <h1>Peak Focus</h1>
+      <Timer />
     </div>
   );
 }

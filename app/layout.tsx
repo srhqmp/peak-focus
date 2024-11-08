@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${varelaRound.className}  antialiased`}>
+      <body className={`${varelaRound.className} antialiased px-2`}>
         <Header />
         {children}
       </body>
