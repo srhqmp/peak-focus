@@ -6,10 +6,15 @@ import { TimerOption } from '@/app/lib/definitions';
 export default function Timer() {
   const [active, setActive] = useState<TimerOption>(TimerOption.pomodoro); // pomodoro | short-break | long-break
 
+  const changeOption = (option: TimerOption) => () => {
+    setActive(option);
+  };
+
   return (
-    <div className="container max-w-2xl mx-auto bg-accent rounded-md py-6 flex flex-col items-center">
+    <div className="container max-w-2xl mx-auto bg-white bg-opacity-10 rounded-md py-6 flex flex-col items-center">
       <div id="timer-options" className="flex gap-6">
         <button
+          onClick={changeOption(TimerOption.pomodoro)}
           className={
             active === TimerOption.pomodoro
               ? 'bg-background px-4 py-1 rounded-md font-bold'
@@ -19,6 +24,7 @@ export default function Timer() {
           Pomodoro
         </button>
         <button
+          onClick={changeOption(TimerOption.shortBreak)}
           className={
             active === TimerOption.shortBreak
               ? 'bg-background px-4 py-1 rounded-md font-bold'
@@ -28,6 +34,7 @@ export default function Timer() {
           Short Break
         </button>
         <button
+          onClick={changeOption(TimerOption.longBreak)}
           className={
             active === TimerOption.longBreak
               ? 'bg-background px-4 py-1 rounded-md font-bold'
