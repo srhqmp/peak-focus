@@ -6,7 +6,7 @@ import { TimerOption, TimeType } from '@/app/lib/definitions';
 const timeOptions = {
   pomodoro: { minutes: 25, seconds: 0 },
   'short-break': { minutes: 5, seconds: 0 },
-  'long-break': { minutes: 10, seconds: 0 },
+  'long-break': { minutes: 15, seconds: 0 },
 };
 
 export default function Timer() {
@@ -16,9 +16,27 @@ export default function Timer() {
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  const changeOption = (option: TimerOption) => () => {
+  const changeOption = (option: TimerOption) => {
     setActive(option);
     setTime(timeOptions[option]);
+  };
+
+  const stopInterval = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  };
+
+  const toggleButton = () => {
+    const status = !isStarted;
+    console.log('timer ', status ? 'started' : 'paused');
+    setIsStarted(status);
+    if (status) {
+      decreaseTime();
+    } else {
+      stopInterval();
+    }
   };
 
   const decreaseTime = () => {
@@ -30,34 +48,32 @@ export default function Timer() {
         if (seconds !== 0 && minutes !== 0) {
           return { minutes, seconds: seconds - 1 };
         }
+        if (seconds !== 0 && minutes === 0) {
+          return { minutes, seconds: seconds - 1 };
+        }
+        console.log('timer ended');
+        setIsStarted(false);
+        stopInterval();
+
+        if (active === TimerOption.pomodoro) {
+          changeOption(TimerOption.shortBreak);
+        }
+        if (
+          active == TimerOption.shortBreak ||
+          active == TimerOption.longBreak
+        ) {
+          changeOption(TimerOption.pomodoro);
+        }
         return { minutes, seconds };
       });
     }, 1000);
-  };
-
-  const stopInterval = () => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-  };
-
-  const startTimer = () => () => {
-    const status = !isStarted;
-    console.log('timer ', status ? 'started' : 'paused');
-    setIsStarted(status);
-    if (status) {
-      decreaseTime();
-    } else {
-      stopInterval();
-    }
   };
 
   return (
     <div className="container max-w-2xl mx-auto bg-white bg-opacity-10 rounded-md py-6 flex flex-col items-center">
       <div id="timer-options" className="flex gap-6">
         <button
-          onClick={changeOption(TimerOption.pomodoro)}
+          onClick={() => changeOption(TimerOption.pomodoro)}
           className={
             active === TimerOption.pomodoro
               ? 'bg-background px-4 py-1 rounded-md font-bold'
@@ -67,7 +83,7 @@ export default function Timer() {
           Pomodoro
         </button>
         <button
-          onClick={changeOption(TimerOption.shortBreak)}
+          onClick={() => changeOption(TimerOption.shortBreak)}
           className={
             active === TimerOption.shortBreak
               ? 'bg-background px-4 py-1 rounded-md font-bold'
@@ -77,7 +93,7 @@ export default function Timer() {
           Short Break
         </button>
         <button
-          onClick={changeOption(TimerOption.longBreak)}
+          onClick={() => changeOption(TimerOption.longBreak)}
           className={
             active === TimerOption.longBreak
               ? 'bg-background px-4 py-1 rounded-md font-bold'
@@ -93,7 +109,7 @@ export default function Timer() {
       </div>
       <button
         id="start-stop-button"
-        onClick={startTimer()}
+        onClick={() => toggleButton()}
         className={`button uppercase text-2xl text-background bg-white px-14 rounded-md py-3 relative border-b-8 font-bold ${
           isStarted ? 'top-1' : ''
         }`}
