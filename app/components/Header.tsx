@@ -11,7 +11,7 @@ export default function Header() {
           Peakfocus
         </div>
         <div>
-          <button className="rounded-md bg-accent border border-transparent flex gap-1 items-center py-2 px-4 text-center text-xs text-white transition-all shadow-sm hover:shadow-lg active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
+          <button className="rounded-md bg-white bg-opacity-10 border border-transparent flex gap-1 items-center py-2 px-4 text-center text-xs text-white transition-all shadow-sm hover:shadow-lg active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
             <Image src={SettingsWhite} alt="setting" height={20} />
             <span className="hidden sm:block">Setting</span>
           </button>
