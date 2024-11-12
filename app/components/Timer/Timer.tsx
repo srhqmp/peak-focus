@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useContext, useEffect } from 'react';
 import { TimerOption, TimeType } from '@/app/lib/definitions';
+import { BackgroundContext } from '@/app/context';
 
 const timeOptions = {
   pomodoro: { minutes: 25, seconds: 0 },
@@ -13,6 +14,18 @@ export default function Timer() {
   const [active, setActive] = useState<TimerOption>(TimerOption.pomodoro); // pomodoro | short-break | long-break
   const [time, setTime] = useState<TimeType>(timeOptions[active]);
   const [isStarted, setIsStarted] = useState(false);
+
+  const context = useContext(BackgroundContext);
+
+  if (!context) {
+    throw new Error('BackgroundContext is not provided');
+  }
+
+  const { changeBg, color } = context;
+
+  useEffect(() => {
+    changeBg(active); // Update background after the component mounts or active changes
+  }, [active, changeBg]);
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -76,7 +89,7 @@ export default function Timer() {
           onClick={() => changeOption(TimerOption.pomodoro)}
           className={
             active === TimerOption.pomodoro
-              ? 'bg-background px-4 py-1 rounded-md font-bold'
+              ? `bg-${color} px-4 py-1 rounded-md font-bold`
               : ''
           }
         >
@@ -86,7 +99,7 @@ export default function Timer() {
           onClick={() => changeOption(TimerOption.shortBreak)}
           className={
             active === TimerOption.shortBreak
-              ? 'bg-background px-4 py-1 rounded-md font-bold'
+              ? `bg-${color}  px-4 py-1 rounded-md font-bold`
               : ''
           }
         >
@@ -96,7 +109,7 @@ export default function Timer() {
           onClick={() => changeOption(TimerOption.longBreak)}
           className={
             active === TimerOption.longBreak
-              ? 'bg-background px-4 py-1 rounded-md font-bold'
+              ? `bg-${color}  px-4 py-1 rounded-md font-bold`
               : ''
           }
         >
@@ -110,7 +123,7 @@ export default function Timer() {
       <button
         id="start-stop-button"
         onClick={() => toggleButton()}
-        className={`button uppercase text-2xl text-background bg-white px-14 rounded-md py-3 relative border-b-8 font-bold ${
+        className={`button uppercase text-2xl bg-white text-${color} px-14 rounded-md py-3 relative border-b-8 font-bold ${
           isStarted ? 'top-1' : ''
         }`}
       >

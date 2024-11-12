@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Varela_Round } from 'next/font/google';
 import './globals.css';
 
-import { Header } from './components';
+import { BackgroundProvider, Header } from './components';
 
 const varelaRound = Varela_Round({
   subsets: ['latin'],
@@ -26,9 +26,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${varelaRound.className} antialiased px-2`}>
-        <Header />
-        {children}
+      <body className={`${varelaRound.className} antialiased px-2 text-white`}>
+        <BackgroundProvider>
+          <Header />
+          {children}
+        </BackgroundProvider>
       </body>
     </html>
   );
