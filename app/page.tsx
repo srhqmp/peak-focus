@@ -1,9 +1,10 @@
-import { Timer } from './components';
+import { Timer, Tasks } from './components';
 
 export default function Home() {
   return (
-    <div>
+    <div className="px-2 sm:px-0">
       <Timer />
+      <Tasks />
     </div>
   );
 }

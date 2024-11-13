@@ -4,7 +4,7 @@ import SettingsWhite from '@/public/settings-white.svg';
 
 export default function Header() {
   return (
-    <nav className="container max-w-2xl mx-auto mb-8">
+    <nav className="container max-w-2xl mx-auto mb-8 px-2 sm:px-0">
       <div className="flex  justify-between py-2 border-b-gray-600 border-b-2 border-opacity-15">
         <div className="logo flex gap-1 items-center text-lg font-semibold">
           <Image src={LogoWhite} height={28} alt="Logo" />
