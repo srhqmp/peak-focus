@@ -80,7 +80,7 @@ export default function Tasks() {
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="currentColor"
-            className="h-8 bg-white bg-opacity-20 rounded"
+            className="h-8 bg-white bg-opacity-20 rounded hover:bg-opacity-25"
           >
             <path
               fill-rule="evenodd"
