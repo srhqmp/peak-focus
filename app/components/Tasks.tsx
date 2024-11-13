@@ -96,8 +96,10 @@ export default function Tasks() {
             <li
               key={task.id}
               className={clsx(
-                activeTask.id === task.id ? 'border-l-8 border-black' : '',
-                'bg-white flex gap-12 justify-between text-gray-600 mb-2 px-6 py-4 rounded cursor-pointer font-semibold'
+                activeTask.id === task.id
+                  ? 'border-black'
+                  : 'hover:border-gray-300',
+                'bg-white border-white border-l-8 flex gap-12 justify-between text-gray-600 mb-2 px-4 py-4 rounded cursor-pointer font-semibold'
               )}
               onClick={() => updateActiveTask(task.id)}
             >
@@ -114,7 +116,8 @@ export default function Tasks() {
                     fill="currentColor"
                     className={clsx(
                       'h-8',
-                      task.isDone ? `text-${context.color}` : 'text-gray-300'
+                      task.isDone ? `text-${context.color}` : 'text-gray-300',
+                      'hover:opacity-60'
                     )}
                   >
                     <path
@@ -147,7 +150,7 @@ export default function Tasks() {
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="currentColor"
-                    className="h-8 border-2 rounded border-gray-300"
+                    className="h-8 border-2 rounded border-gray-300 hover:bg-gray-300"
                   >
                     <path
                       fill-rule="evenodd"
@@ -161,7 +164,7 @@ export default function Tasks() {
           ))}
         </ul>
       </div>
-      <button className="w-full border-2 bg-black bg-opacity-10 rounded opacity-60 py-4 font-bold border-dashed flex gap-2 items-center justify-center">
+      <button className="w-full border-2 bg-black bg-opacity-10 hover:opacity-80 rounded opacity-60 py-4 font-bold border-dashed flex gap-2 items-center justify-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
