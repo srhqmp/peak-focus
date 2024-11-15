@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import clsx from 'clsx';
+import { ReactSortable } from 'react-sortablejs';
 
 import { BackgroundContext } from '@/app/context';
 import { TaskType } from '@/app/lib/definitions';
@@ -91,13 +92,19 @@ export default function Tasks() {
         </div>
       </div>
       <div id="task-list">
-        <ul>
+        <ReactSortable
+          list={tasks}
+          setList={setTasks}
+          delay={500}
+          delayOnTouchOnly={true}
+          animation={300}
+        >
           {tasks.map((task) => (
             <li
               key={task.id}
               className={clsx(
                 activeTask.id === task.id
-                  ? 'border-black'
+                  ? 'border-black top-0.5 relative'
                   : 'hover:border-gray-300',
                 'bg-white border-white border-l-8 flex gap-12 justify-between text-gray-600 mb-2 px-4 py-4 rounded cursor-pointer font-semibold'
               )}
@@ -162,7 +169,7 @@ export default function Tasks() {
               </div>
             </li>
           ))}
-        </ul>
+        </ReactSortable>
       </div>
       <button className="w-full border-2 bg-black bg-opacity-10 hover:opacity-80 rounded opacity-60 py-4 font-bold border-dashed flex gap-2 items-center justify-center">
         <svg
