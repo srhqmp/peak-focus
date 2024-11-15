@@ -7,6 +7,7 @@ import { ReactSortable } from 'react-sortablejs';
 
 import { BackgroundContext } from '@/app/context';
 import { TaskType } from '@/app/lib/definitions';
+import TaskForm from './TaskForm';
 
 const taskItems = [
   {
@@ -39,6 +40,7 @@ export default function Tasks() {
   const [tasks, setTasks] = useState(taskItems);
   const [activeTask, setActiveTask] = useState<TaskType>(tasks[0]);
   const context = React.useContext(BackgroundContext);
+  const [openForm, setOpenForm] = useState(false);
 
   if (!context) {
     throw new Error('BackgroundContext is not provided');
@@ -59,8 +61,16 @@ export default function Tasks() {
     }
   };
 
+  const changeFormVisibility = () => {
+    setOpenForm((curr) => !curr);
+  };
+
+  const addNewTask = (task: TaskType) => {
+    setTasks((curr) => curr.concat(task));
+  };
+
   return (
-    <div className="container max-w-2xl   mx-auto ">
+    <div className="container max-w-2xl mx-auto mb-12">
       <div id="current-task" className="text-center mt-6">
         <h3 className="text-white opacity-50">#1</h3>
         <h2 className="text-lg">{activeTask.name}</h2>
@@ -169,21 +179,31 @@ export default function Tasks() {
           ))}
         </ReactSortable>
       </div>
-      <button className="w-full border-2 bg-black bg-opacity-10 hover:opacity-80 rounded opacity-60 py-4 font-bold border-dashed flex gap-2 items-center justify-center">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          className="h-8"
+      {openForm ? (
+        <TaskForm
+          changeFormVisibility={changeFormVisibility}
+          addNewTask={addNewTask}
+        />
+      ) : (
+        <button
+          onClick={() => changeFormVisibility()}
+          className="w-full border-2 bg-black bg-opacity-10 hover:opacity-80 rounded opacity-60 py-4 font-bold border-dashed flex gap-2 items-center justify-center"
         >
-          <path
-            fill-rule="evenodd"
-            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z"
-            clip-rule="evenodd"
-          />
-        </svg>
-        <span>Add Task</span>
-      </button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="h-8"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          <span>Add Task</span>
+        </button>
+      )}
     </div>
   );
 }
