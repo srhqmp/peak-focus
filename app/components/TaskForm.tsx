@@ -111,7 +111,7 @@ export default function TaskForm({
           </div>
         </div>
       </div>
-      <div className="bg-gray-100 px-4 w-full py-3 left-0 flex justify-end">
+      <div className="bg-gray-100 px-4 w-full py-3 left-0 flex justify-end rounded-b">
         <button
           onClick={() => changeFormVisibility()}
           className="text-gray-600 font-medium py-2 px-6"

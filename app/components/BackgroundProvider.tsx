@@ -28,7 +28,12 @@ export default function BackgroundProvider({
   const bg = `bg-${backgroundColor}`;
 
   return (
-    <div className={clsx(bg, 'h-screen')}>
+    <div
+      className={clsx(
+        bg,
+        'min-h-screen absolute  w-full left-0 top-0  px-2 transition-colors duration-400'
+      )}
+    >
       <BackgroundContext.Provider value={{ changeBg, color: backgroundColor }}>
         {children}
       </BackgroundContext.Provider>

@@ -70,7 +70,7 @@ export default function Tasks() {
   };
 
   return (
-    <div className="container max-w-2xl mx-auto mb-12">
+    <div className="container max-w-2xl mx-auto mb-24">
       <div id="current-task" className="text-center mt-6">
         <h3 className="text-white opacity-50">#1</h3>
         <h2 className="text-lg">{activeTask.name}</h2>

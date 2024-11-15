@@ -11,10 +11,10 @@ const config: Config = {
     extend: {
       colors: {
         pomodoro: '#ba4949',
-        foreground: '#ffffff',
-        accent: '#C15C5C',
         shortbreak: '#38858a',
         longbreak: '#397097',
+        foreground: '#ffffff',
+        accent: '#C15C5C',
       },
     },
   },
