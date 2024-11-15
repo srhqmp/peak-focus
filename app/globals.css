@@ -12,3 +12,11 @@
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.active-task {
+  @apply border-black top-0.5 relative;
+}
+
+.inactive-task {
+  @apply hover:border-gray-300;
+}

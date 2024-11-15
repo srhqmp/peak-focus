@@ -103,9 +103,7 @@ export default function Tasks() {
             <li
               key={task.id}
               className={clsx(
-                activeTask.id === task.id
-                  ? 'border-black top-0.5 relative'
-                  : 'hover:border-gray-300',
+                activeTask.id === task.id ? 'active-task' : 'inactive-task',
                 'bg-white border-white border-l-8 flex gap-12 justify-between text-gray-600 mb-2 px-4 py-4 rounded cursor-pointer font-semibold'
               )}
               onClick={() => updateActiveTask(task.id)}
