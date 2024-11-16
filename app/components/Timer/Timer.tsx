@@ -83,7 +83,7 @@ export default function Timer() {
   };
 
   return (
-    <div className="container max-w-2xl mx-auto bg-white bg-opacity-10 rounded-md py-6 flex flex-col items-center">
+    <div className="bg-white bg-opacity-10 rounded-md py-6 flex flex-col items-center">
       <div id="timer-options" className="flex gap-6">
         <button
           onClick={() => changeOption(TimerOption.pomodoro)}

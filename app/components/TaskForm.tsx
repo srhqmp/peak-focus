@@ -11,10 +11,10 @@ enum AdjustmentType {
 
 export default function TaskForm({
   changeFormVisibility,
-  addNewTask,
+  addTask,
 }: {
   changeFormVisibility: () => void;
-  addNewTask: (task: TaskType) => void;
+  addTask: (task: TaskType) => void;
 }) {
   const [pomodoros, setPomodoros] = useState(1);
   const [title, setTitle] = useState('');
@@ -34,7 +34,7 @@ export default function TaskForm({
         pomodoro: { estimated: pomodoros, finished: 0 },
       };
 
-      addNewTask(newTask);
+      addTask(newTask);
       resetValues();
     }
   };

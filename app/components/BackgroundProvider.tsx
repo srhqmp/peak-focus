@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useState } from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import { BackgroundContext } from '@/app/context/index';
 
@@ -15,7 +15,7 @@ const color = {
 export default function BackgroundProvider({
   children,
 }: {
-  children: ReactNode;
+  children: React.ReactNode;
 }) {
   const [backgroundColor, setBackgroundColor] = useState(color.pomodoro);
 

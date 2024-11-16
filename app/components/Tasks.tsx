@@ -1,76 +1,36 @@
 'use client';
 
 import React, { useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import clsx from 'clsx';
 import { ReactSortable } from 'react-sortablejs';
 
-import { BackgroundContext } from '@/app/context';
-import { TaskType } from '@/app/lib/definitions';
+import { BackgroundContext, TasksContext } from '@/app/context';
 import TaskForm from './TaskForm';
 
-const taskItems = [
-  {
-    name: 'Do Laundry and exercise after because im late  and I am broke asf but i want to eat out.',
-    id: uuidv4(),
-    isDone: false,
-    pomodoro: { estimated: 4, finished: 2 },
-  },
-  {
-    name: 'Wash Dishes',
-    id: uuidv4(),
-    isDone: true,
-    pomodoro: { estimated: 1, finished: 1 },
-  },
-  {
-    name: 'Skincare routine',
-    id: uuidv4(),
-    isDone: true,
-    pomodoro: { estimated: 2, finished: 2 },
-  },
-  {
-    name: 'Learn how to code',
-    id: uuidv4(),
-    isDone: false,
-    pomodoro: { estimated: 6, finished: 3 },
-  },
-];
-
 export default function Tasks() {
-  const [tasks, setTasks] = useState(taskItems);
-  const [activeTask, setActiveTask] = useState<TaskType>(tasks[0]);
-  const context = React.useContext(BackgroundContext);
+  const bgContext = React.useContext(BackgroundContext);
+  const tasksContext = React.useContext(TasksContext);
   const [openForm, setOpenForm] = useState(false);
 
-  if (!context) {
-    throw new Error('BackgroundContext is not provided');
+  if (!bgContext || !tasksContext) {
+    throw new Error('Context is not provided');
   }
 
-  const toggleMarkAsDoneButton = (id: string) => {
-    setTasks((curr) =>
-      curr.map((item) =>
-        item.id === id ? { ...item, isDone: !item.isDone } : item
-      )
-    );
-  };
-
-  const updateActiveTask = (id: string) => {
-    const task = tasks.find((item) => item.id === id);
-    if (task) {
-      setActiveTask(task);
-    }
-  };
+  const {
+    tasks,
+    addTask,
+    activeTask,
+    changeActiveTask,
+    setTasks,
+    markTaskAsDone,
+  } = tasksContext;
 
   const changeFormVisibility = () => {
     setOpenForm((curr) => !curr);
   };
 
-  const addNewTask = (task: TaskType) => {
-    setTasks((curr) => curr.concat(task));
-  };
-
   return (
-    <div className="container max-w-2xl mx-auto mb-24">
+    <div>
       <div id="current-task" className="text-center mt-6">
         <h3 className="text-white opacity-50">#1</h3>
         <h2 className="text-lg">{activeTask.name}</h2>
@@ -116,13 +76,13 @@ export default function Tasks() {
                 activeTask.id === task.id ? 'active-task' : 'inactive-task',
                 'bg-white border-white border-l-8 flex gap-12 justify-between text-gray-600 mb-2 px-4 py-4 rounded cursor-pointer font-semibold'
               )}
-              onClick={() => updateActiveTask(task.id)}
+              onClick={() => changeActiveTask(task.id)}
             >
               <div className="task-title flex gap-2 items-center leading-relaxed">
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    toggleMarkAsDoneButton(task.id);
+                    markTaskAsDone(task.id);
                   }}
                 >
                   <svg
@@ -131,7 +91,7 @@ export default function Tasks() {
                     fill="currentColor"
                     className={clsx(
                       'h-8',
-                      task.isDone ? `text-${context.color}` : 'text-gray-300',
+                      task.isDone ? `text-${bgContext.color}` : 'text-gray-300',
                       'hover:opacity-60'
                     )}
                   >
@@ -182,7 +142,7 @@ export default function Tasks() {
       {openForm ? (
         <TaskForm
           changeFormVisibility={changeFormVisibility}
-          addNewTask={addNewTask}
+          addTask={addTask}
         />
       ) : (
         <button

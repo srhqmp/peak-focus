@@ -23,5 +23,10 @@ export type TaskType = {
 
 export type TasksContextType = {
   activeTask: TaskType;
-  // TODO: Add task list?
+  tasks: TaskType[];
+  addTask: (newTask: TaskType) => void;
+  changeActiveTask: (id: string) => void;
+  updateTask: (updatedTask: TaskType) => void;
+  setTasks: React.Dispatch<React.SetStateAction<TaskType[]>>;
+  markTaskAsDone: (id: string) => void;
 };
