@@ -28,7 +28,7 @@ const taskItems = [
     name: 'Learn how to code',
     id: uuidv4(),
     isDone: false,
-    pomodoro: { estimated: 6, finished: 3 },
+    pomodoro: { estimated: 7, finished: 3 },
   },
 ];
 
