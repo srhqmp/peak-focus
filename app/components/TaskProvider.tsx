@@ -24,12 +24,6 @@ const taskItems = [
     isDone: true,
     pomodoro: { estimated: 2, finished: 2 },
   },
-  {
-    name: 'Learn how to code',
-    id: uuidv4(),
-    isDone: false,
-    pomodoro: { estimated: 7, finished: 3 },
-  },
 ];
 
 export default function TaskProvider({
@@ -55,6 +49,9 @@ export default function TaskProvider({
     setTasks((curr) =>
       curr.map((t) => (t.id === updatedTask.id ? updatedTask : t))
     );
+    if (activeTask.id === updatedTask.id) {
+      setActiveTask(updatedTask);
+    }
   };
 
   const markTaskAsDone = (id: string) => {
@@ -63,6 +60,13 @@ export default function TaskProvider({
         item.id === id ? { ...item, isDone: !item.isDone } : item
       )
     );
+  };
+
+  const deleteTask = (id: string) => {
+    setTasks((curr) => curr.filter((item) => item.id !== id));
+    if (activeTask.id === id) {
+      setActiveTask(tasks[0]);
+    }
   };
 
   return (
@@ -75,6 +79,7 @@ export default function TaskProvider({
         updateTask,
         setTasks,
         markTaskAsDone,
+        deleteTask,
       }}
     >
       {children}

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { TaskType } from '@/app/lib/definitions';
+import clsx from 'clsx';
 
 enum AdjustmentType {
   increase = 'increase',
@@ -12,12 +13,18 @@ enum AdjustmentType {
 export default function TaskForm({
   changeFormVisibility,
   addTask,
+  updateTask,
+  isEditMode = false,
+  task,
 }: {
   changeFormVisibility: () => void;
-  addTask: (task: TaskType) => void;
+  addTask: ((task: TaskType) => void) | null;
+  isEditMode: boolean;
+  task: TaskType | null;
+  updateTask: ((updatedTask: TaskType) => void) | null;
 }) {
-  const [pomodoros, setPomodoros] = useState(1);
-  const [title, setTitle] = useState('');
+  const [pomodoros, setPomodoros] = useState(task?.pomodoro.estimated || 1);
+  const [title, setTitle] = useState(task?.name);
 
   const resetValues = () => {
     setPomodoros(1);
@@ -27,14 +34,28 @@ export default function TaskForm({
 
   const handleSubmit = () => {
     if (title) {
-      const newTask = {
-        id: uuidv4(),
-        name: title,
-        isDone: false,
-        pomodoro: { estimated: pomodoros, finished: 0 },
-      };
+      if (!isEditMode && addTask) {
+        const newTask = {
+          id: uuidv4(),
+          name: title,
+          isDone: false,
+          pomodoro: { estimated: pomodoros, finished: 0 },
+        };
+        addTask(newTask);
+      }
 
-      addTask(newTask);
+      if (isEditMode && updateTask && task) {
+        const newTask = {
+          id: task.id,
+          name: title,
+          isDone: task?.isDone,
+          pomodoro: {
+            estimated: pomodoros,
+            finished: task?.pomodoro.finished,
+          },
+        };
+        updateTask(newTask);
+      }
       resetValues();
     }
   };
@@ -53,7 +74,7 @@ export default function TaskForm({
   };
 
   return (
-    <div className="w-full bg-white pt-10 rounded-tl rounded">
+    <div className="w-full bg-white pt-10 rounded-tl rounded mb-2">
       <div className="px-6">
         <input
           type="text"
@@ -111,19 +132,31 @@ export default function TaskForm({
           </div>
         </div>
       </div>
-      <div className="bg-gray-100 px-4 w-full py-3 left-0 flex justify-end rounded-b">
-        <button
-          onClick={() => changeFormVisibility()}
-          className="text-gray-600 font-medium py-2 px-6"
-        >
-          Cancel
-        </button>
-        <button
-          onClick={() => handleSubmit()}
-          className="py-2 px-6 bg-gray-900 rounded"
-        >
-          Save
-        </button>
+      <div
+        className={clsx(
+          'bg-gray-100 px-4 w-full py-3 left-0 flex rounded-b',
+          isEditMode ? 'justify-between' : 'justify-end'
+        )}
+      >
+        {isEditMode && (
+          <div className="text-gray-600 font-medium py-2 px-2">
+            <button>Delete</button>
+          </div>
+        )}
+        <div className="flex justify-end">
+          <button
+            onClick={() => changeFormVisibility()}
+            className="text-gray-600 font-medium py-2 px-6"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={() => handleSubmit()}
+            className="py-2 px-6 bg-gray-900 rounded"
+          >
+            Save
+          </button>
+        </div>
       </div>
     </div>
   );

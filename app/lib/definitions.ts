@@ -29,4 +29,5 @@ export type TasksContextType = {
   updateTask: (updatedTask: TaskType) => void;
   setTasks: React.Dispatch<React.SetStateAction<TaskType[]>>;
   markTaskAsDone: (id: string) => void;
+  deleteTask: (id: string) => void;
 };
