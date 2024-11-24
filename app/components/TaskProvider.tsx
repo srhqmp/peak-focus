@@ -64,7 +64,10 @@ export default function TaskProvider({
 
   const deleteTask = (id: string) => {
     setTasks((curr) => curr.filter((item) => item.id !== id));
+
+    console.log(activeTask.id, id);
     if (activeTask.id === id) {
+      // TODO: Not currently working, fix this
       setActiveTask(tasks[0]);
     }
   };

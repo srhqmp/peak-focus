@@ -24,6 +24,7 @@ export default function Tasks() {
     changeActiveTask,
     setTasks,
     markTaskAsDone,
+    deleteTask,
   } = tasksContext;
 
   const changeFormVisibility = () => {
@@ -79,6 +80,7 @@ export default function Tasks() {
               activeTask={activeTask}
               changeActiveTask={changeActiveTask}
               updateTask={updateTask}
+              deleteTask={deleteTask}
             />
           ))}
         </ReactSortable>
@@ -90,6 +92,7 @@ export default function Tasks() {
           isEditMode={false}
           task={null}
           updateTask={null}
+          deleteTask={null}
         />
       ) : (
         <button

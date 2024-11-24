@@ -14,6 +14,7 @@ export default function TaskForm({
   changeFormVisibility,
   addTask,
   updateTask,
+  deleteTask,
   isEditMode = false,
   task,
 }: {
@@ -22,6 +23,7 @@ export default function TaskForm({
   isEditMode: boolean;
   task: TaskType | null;
   updateTask: ((updatedTask: TaskType) => void) | null;
+  deleteTask: ((id: string) => void) | null;
 }) {
   const [pomodoros, setPomodoros] = useState(task?.pomodoro.estimated || 1);
   const [title, setTitle] = useState(task?.name);
@@ -58,6 +60,10 @@ export default function TaskForm({
       }
       resetValues();
     }
+  };
+
+  const removeTask = () => {
+    if (task && deleteTask) deleteTask(task.id);
   };
 
   const adjustPomodoros = (type: AdjustmentType) => {
@@ -139,7 +145,10 @@ export default function TaskForm({
         )}
       >
         {isEditMode && (
-          <div className="text-gray-600 font-medium py-2 px-2">
+          <div
+            onClick={() => removeTask()}
+            className="text-gray-600 font-medium py-2 px-2"
+          >
             <button>Delete</button>
           </div>
         )}

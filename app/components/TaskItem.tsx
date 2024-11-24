@@ -10,6 +10,7 @@ export default function TaskItem({
   activeTask,
   changeActiveTask,
   updateTask,
+  deleteTask,
 }: {
   task: TaskType;
   markTaskAsDone: (id: string) => void;
@@ -17,6 +18,7 @@ export default function TaskItem({
   activeTask: TaskType;
   changeActiveTask: (id: string) => void;
   updateTask: (updatedTask: TaskType) => void;
+  deleteTask: (id: string) => void;
 }) {
   const [isEditMode, setIsEditMode] = useState(false);
 
@@ -32,6 +34,7 @@ export default function TaskItem({
         changeFormVisibility={changeFormVisibility}
         addTask={null}
         updateTask={updateTask}
+        deleteTask={deleteTask}
       />
     );
   }
