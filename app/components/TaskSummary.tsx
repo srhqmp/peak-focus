@@ -16,6 +16,10 @@ export default function TaskSummary() {
 
   const { tasks } = tasksContext;
 
+  if (tasks.length === 0) {
+    return null;
+  }
+
   const totalPomodoros = tasks.reduce(
     (sum, curr) =>
       (sum += curr.isDone ? curr.pomodoro.finished : curr.pomodoro.estimated),

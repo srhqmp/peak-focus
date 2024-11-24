@@ -1,52 +1,51 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TasksContext } from '@/app/context';
-import { v4 as uuidv4 } from 'uuid';
 import { TaskType } from '../lib/definitions';
 
-const taskItems = [
-  {
-    name: 'Do Laundry and exercise after because im late  and I am broke asf but i want to eat out.',
-    id: uuidv4(),
-    isDone: false,
-    pomodoro: { estimated: 4, finished: 2 },
-  },
-  {
-    name: 'Wash Dishes',
-    id: uuidv4(),
-    isDone: true,
-    pomodoro: { estimated: 1, finished: 1 },
-  },
-  {
-    name: 'Skincare routine',
-    id: uuidv4(),
-    isDone: true,
-    pomodoro: { estimated: 2, finished: 2 },
-  },
-];
+function getInitialState() {
+  const tasks = localStorage.getItem('tasks');
+  return tasks ? JSON.parse(tasks) : [];
+}
+
+function getActiveTask() {
+  const id = localStorage.getItem('active-task-id');
+  const tasks = getInitialState();
+
+  const activeTask = tasks.length
+    ? tasks.find((t: TaskType) => t.id === id)
+    : null;
+  return activeTask ? activeTask : tasks[0];
+}
 
 export default function TaskProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [tasks, setTasks] = useState(taskItems);
-  const [activeTask, setActiveTask] = useState(tasks[0]);
+  const [tasks, setTasks] = useState<TaskType[]>(getInitialState);
+  const [activeTask, setActiveTask] = useState<TaskType>(getActiveTask);
+
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    localStorage.setItem('active-task-id', activeTask?.id);
+  }, [tasks, activeTask]);
 
   const addTask = (newTask: TaskType) => {
-    setTasks((curr) => curr.concat(newTask));
+    setTasks((curr: TaskType[]) => [...curr, newTask]);
+    if (tasks.length === 0) setActiveTask(newTask);
   };
 
   const changeActiveTask = (id: string) => {
-    const task = tasks.find((item) => item.id === id);
+    const task = tasks.find((item: TaskType) => item.id === id);
     if (task) {
       setActiveTask(task);
     }
   };
 
   const updateTask = (updatedTask: TaskType) => {
-    setTasks((curr) =>
+    setTasks((curr: TaskType[]) =>
       curr.map((t) => (t.id === updatedTask.id ? updatedTask : t))
     );
     if (activeTask.id === updatedTask.id) {
@@ -55,7 +54,7 @@ export default function TaskProvider({
   };
 
   const markTaskAsDone = (id: string) => {
-    setTasks((curr) =>
+    setTasks((curr: TaskType[]) =>
       curr.map((item) =>
         item.id === id ? { ...item, isDone: !item.isDone } : item
       )
@@ -63,7 +62,7 @@ export default function TaskProvider({
   };
 
   const deleteTask = (id: string) => {
-    setTasks((curr) => curr.filter((item) => item.id !== id));
+    setTasks((curr: TaskType[]) => curr.filter((item) => item.id !== id));
 
     console.log(activeTask.id, id);
     if (activeTask.id === id) {

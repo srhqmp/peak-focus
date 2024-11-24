@@ -31,11 +31,20 @@ export default function Tasks() {
     setOpenForm((curr) => !curr);
   };
 
+  const getTitle = (): string => {
+    switch (bgContext.color) {
+      case 'pomodoro':
+        return 'Time to focus!';
+      default:
+        return 'Time for a break!';
+    }
+  };
+
   return (
     <div>
       <div id="current-task" className="text-center mt-6">
         <h3 className="text-white opacity-50">#1</h3>
-        <h2 className="text-lg">{activeTask.name}</h2>
+        <h2 className="text-lg">{activeTask ? activeTask.name : getTitle()}</h2>
       </div>
       <div
         id="tasks-header"
