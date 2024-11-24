@@ -15,7 +15,7 @@ export default function TaskItem({
   task: TaskType;
   markTaskAsDone: (id: string) => void;
   bgColor: string;
-  activeTask: TaskType;
+  activeTask: TaskType | null;
   changeActiveTask: (id: string) => void;
   updateTask: (updatedTask: TaskType) => void;
   deleteTask: (id: string) => void;
@@ -42,7 +42,9 @@ export default function TaskItem({
   return (
     <li
       className={clsx(
-        activeTask.id === task.id ? 'active-task' : 'inactive-task',
+        activeTask && activeTask.id === task.id
+          ? 'active-task'
+          : 'inactive-task',
         'bg-white border-white border-l-8 flex gap-12 justify-between text-gray-600 mb-2 px-4 py-4 rounded cursor-pointer font-semibold'
       )}
       onClick={() => changeActiveTask(task.id)}

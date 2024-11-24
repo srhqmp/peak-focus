@@ -22,7 +22,7 @@ export type TaskType = {
 };
 
 export type TasksContextType = {
-  activeTask: TaskType;
+  activeTask: TaskType | null;
   tasks: TaskType[];
   addTask: (newTask: TaskType) => void;
   changeActiveTask: (id: string) => void;
