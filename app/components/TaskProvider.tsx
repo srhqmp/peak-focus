@@ -66,6 +66,24 @@ export default function TaskProvider({
     }
   };
 
+  const clearAllTasks = () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    setTasks((curr: TaskType[]) => []);
+    setActiveTask(null);
+  };
+
+  const clearAllFinishedTasks = () => {
+    let hasActiveTask;
+    setTasks((curr: TaskType[]) => {
+      const filteredTasks = curr.filter((item) => !item.isDone);
+      hasActiveTask = filteredTasks.find((item) => item.id === activeTask?.id);
+      return filteredTasks;
+    });
+    if (hasActiveTask === null || hasActiveTask === undefined) {
+      setActiveTask(null);
+    }
+  };
+
   return (
     <TasksContext.Provider
       value={{
@@ -77,6 +95,8 @@ export default function TaskProvider({
         setTasks,
         markTaskAsDone,
         deleteTask,
+        clearAllFinishedTasks,
+        clearAllTasks,
       }}
     >
       {children}

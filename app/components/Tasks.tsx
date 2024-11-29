@@ -6,11 +6,13 @@ import { ReactSortable } from 'react-sortablejs';
 import { BackgroundContext, TasksContext } from '@/app/context';
 import TaskForm from './TaskForm';
 import TaskItem from './TaskItem';
+import TaskListSettings from './TaskListSettings';
 
 export default function Tasks() {
   const bgContext = React.useContext(BackgroundContext);
   const tasksContext = React.useContext(TasksContext);
   const [openForm, setOpenForm] = useState(false);
+  const [openSettings, setOpenSettings] = useState(false);
 
   if (!bgContext || !tasksContext) {
     throw new Error('Context is not provided');
@@ -31,6 +33,10 @@ export default function Tasks() {
     setOpenForm((curr) => !curr);
   };
 
+  const changeSettingsVisibility = () => {
+    setOpenSettings((curr) => !curr);
+  };
+
   const getTitle = (): string => {
     switch (bgContext.color) {
       case 'pomodoro':
@@ -48,14 +54,14 @@ export default function Tasks() {
       </div>
       <div
         id="tasks-header"
-        className="border-b py-3 my-6 flex justify-between"
+        className="relative border-b py-3 my-6 flex justify-between"
       >
         <h3 className="text-lg font-semibold">Tasks</h3>
         <div
           className="tasks-edit cursor-pointer"
           onClick={(e) => {
             e.stopPropagation();
-            // TODO: Handle task list edit
+            changeSettingsVisibility();
           }}
         >
           <svg
@@ -71,6 +77,11 @@ export default function Tasks() {
             />
           </svg>
         </div>
+        {openSettings && (
+          <TaskListSettings
+            changeSettingsVisibility={changeSettingsVisibility}
+          />
+        )}
       </div>
       <div id="task-list">
         <ReactSortable
