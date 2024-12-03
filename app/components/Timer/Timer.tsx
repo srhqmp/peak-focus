@@ -2,7 +2,7 @@
 
 import { useState, useRef, useContext, useEffect } from 'react';
 import { TimerOption, TimeType } from '@/app/lib/definitions';
-import { BackgroundContext } from '@/app/context';
+import { BackgroundContext, TasksContext } from '@/app/context';
 
 const timeOptions = {
   pomodoro: { minutes: 25, seconds: 0 },
@@ -15,17 +15,40 @@ export default function Timer() {
   const [time, setTime] = useState<TimeType>(timeOptions[active]);
   const [isStarted, setIsStarted] = useState(false);
 
-  const context = useContext(BackgroundContext);
+  const bgContext = useContext(BackgroundContext);
+  const taskContext = useContext(TasksContext);
 
-  if (!context) {
-    throw new Error('BackgroundContext is not provided');
+  if (!bgContext || !taskContext) {
+    throw new Error('Context is not provided');
   }
 
-  const { changeBg, color } = context;
+  const { changeBg, color } = bgContext;
+  const { updateTask, activeTask } = taskContext;
 
   useEffect(() => {
     changeBg(active); // Update background after the component mounts or active changes
   }, [active, changeBg]);
+
+  useEffect(() => {
+    if (
+      active === TimerOption.pomodoro &&
+      time.minutes === 0 &&
+      time.seconds === 0 &&
+      activeTask
+    ) {
+      // update active task with finished pomodoro
+      setTimeout(() => {
+        const updatedTask = {
+          ...activeTask,
+          pomodoro: {
+            ...activeTask?.pomodoro,
+            finished: activeTask?.pomodoro.finished + 1,
+          },
+        };
+        updateTask(updatedTask);
+      }, 1200);
+    }
+  }, [time, activeTask, updateTask, active]);
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
