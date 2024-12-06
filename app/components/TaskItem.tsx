@@ -39,6 +39,14 @@ export default function TaskItem({
     );
   }
 
+  const handleTaskClick = (id: string) => {
+    // confirm if user wants to change task
+    const switchTask = window.confirm('Do you want to switch task?');
+    if (switchTask) {
+      changeActiveTask(id);
+    }
+  };
+
   return (
     <li
       className={clsx(
@@ -47,7 +55,7 @@ export default function TaskItem({
           : 'inactive-task',
         'bg-white border-white border-l-8 flex gap-12 justify-between text-gray-600 mb-2 px-4 py-4 rounded cursor-pointer font-semibold'
       )}
-      onClick={() => changeActiveTask(task.id)}
+      onClick={() => handleTaskClick(task.id)}
     >
       <div className="task-title flex gap-2 items-center leading-relaxed">
         <button
