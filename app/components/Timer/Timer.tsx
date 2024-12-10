@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useRef, useContext, useEffect } from 'react';
+import { useState, useRef, useContext, useEffect, useCallback } from 'react';
+import useSound from 'use-sound';
 import { TimerOption, TimeType } from '@/app/lib/definitions';
 import { BackgroundContext, TasksContext } from '@/app/context';
 
@@ -14,6 +15,7 @@ export default function Timer() {
   const [active, setActive] = useState<TimerOption>(TimerOption.pomodoro); // pomodoro | short-break | long-break
   const [time, setTime] = useState<TimeType>(timeOptions[active]);
   const [isStarted, setIsStarted] = useState(false);
+  const [play, { stop }] = useSound('/sounds/alarm.mp3');
 
   const bgContext = useContext(BackgroundContext);
   const taskContext = useContext(TasksContext);
@@ -29,7 +31,14 @@ export default function Timer() {
     changeBg(active); // Update background after the component mounts or active changes
   }, [active, changeBg]);
 
+  const displayNotification = useCallback(() => {
+    const message =
+      active === 'pomodoro' ? "It's time for a break." : 'Time to focus!';
+    window.confirm(message);
+  }, [active]);
+
   useEffect(() => {
+    // time's up
     if (
       active === TimerOption.pomodoro &&
       time.minutes === 0 &&
@@ -45,10 +54,15 @@ export default function Timer() {
             finished: activeTask?.pomodoro.finished + 1,
           },
         };
+        // set finished
         updateTask(updatedTask);
+        // ring the alarm
+        play();
+        // display a popup with message
+        displayNotification();
       }, 1200);
     }
-  }, [time, activeTask, updateTask, active]);
+  }, [time, activeTask, updateTask, active, displayNotification, play]);
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -77,6 +91,7 @@ export default function Timer() {
 
   const decreaseTime = () => {
     intervalRef.current = setInterval(() => {
+      stop();
       setTime(({ minutes, seconds }: TimeType): TimeType => {
         if (seconds === 0 && minutes !== 0) {
           return { minutes: minutes - 1, seconds: 59 };
