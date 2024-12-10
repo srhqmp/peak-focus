@@ -15,7 +15,8 @@ export default function Timer() {
   const [active, setActive] = useState<TimerOption>(TimerOption.pomodoro); // pomodoro | short-break | long-break
   const [time, setTime] = useState<TimeType>(timeOptions[active]);
   const [isStarted, setIsStarted] = useState(false);
-  const [play, { stop }] = useSound('/sounds/alarm.mp3');
+  const [playAlarm, { stop: stopAlarm }] = useSound('/sounds/alarm.mp3');
+  const [playClick] = useSound('/sounds/click.mp3');
 
   const bgContext = useContext(BackgroundContext);
   const taskContext = useContext(TasksContext);
@@ -34,8 +35,10 @@ export default function Timer() {
   const displayNotification = useCallback(() => {
     const message =
       active === 'pomodoro' ? "It's time for a break." : 'Time to focus!';
-    window.confirm(message);
-  }, [active]);
+    if (window.confirm(message)) {
+      stopAlarm();
+    }
+  }, [active, stopAlarm]);
 
   useEffect(() => {
     // time's up
@@ -57,12 +60,12 @@ export default function Timer() {
         // set finished
         updateTask(updatedTask);
         // ring the alarm
-        play();
+        playAlarm();
         // display a popup with message
         displayNotification();
       }, 1200);
     }
-  }, [time, activeTask, updateTask, active, displayNotification, play]);
+  }, [time, activeTask, updateTask, active, displayNotification, playAlarm]);
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -90,8 +93,8 @@ export default function Timer() {
   };
 
   const decreaseTime = () => {
+    playClick();
     intervalRef.current = setInterval(() => {
-      stop();
       setTime(({ minutes, seconds }: TimeType): TimeType => {
         if (seconds === 0 && minutes !== 0) {
           return { minutes: minutes - 1, seconds: 59 };
