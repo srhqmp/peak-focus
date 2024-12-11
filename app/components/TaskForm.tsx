@@ -26,7 +26,7 @@ export default function TaskForm({
   deleteTask: ((id: string) => void) | null;
 }) {
   const [pomodoros, setPomodoros] = useState(task?.pomodoro.estimated || 1);
-  const [title, setTitle] = useState(task?.name);
+  const [title, setTitle] = useState(task?.name || '');
 
   const resetValues = () => {
     setPomodoros(1);
@@ -96,6 +96,10 @@ export default function TaskForm({
             <input
               type="text"
               value={pomodoros}
+              onChange={(e) => {
+                const val = Number(e.target.value);
+                setPomodoros(val < 1 ? pomodoros : val > 100 ? pomodoros : val);
+              }}
               name="task-pomodoros"
               className="w-24 bg-gray-600 bg-opacity-10 text-gray-600 text-lg font-bold px-3 py-2 rounded"
             />
@@ -111,9 +115,9 @@ export default function TaskForm({
                   className="size-6"
                 >
                   <path
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                     d="M11.47 7.72a.75.75 0 0 1 1.06 0l7.5 7.5a.75.75 0 1 1-1.06 1.06L12 9.31l-6.97 6.97a.75.75 0 0 1-1.06-1.06l7.5-7.5Z"
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                   />
                 </svg>
               </button>
@@ -128,9 +132,9 @@ export default function TaskForm({
                   className="size-6"
                 >
                   <path
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                     d="M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.69l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z"
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                   />
                 </svg>
               </button>
